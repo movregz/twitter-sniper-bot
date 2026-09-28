@@ -8,8 +8,8 @@ Type=simple
 # Smoke check: refuse to start on syntax/import-time errors (the 09-27 're'
 # crash class). flock still enforces single instance at runtime.
 ExecStartPre=/path/to/sniper/.venv/bin/python -m py_compile /path/to/sniper/twitter_sniper.py
-ExecStart=/path/to/sniper/.venv/bin/python /path/to/sniper/twitter_sniper.py
 WorkingDirectory=/path/to/sniper
+ExecStart=/path/to/sniper/venv/bin/python /path/to/sniper/twitter_sniper.py
 Environment=PATH=/path/to/sniper/.venv/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUNBUFFERED=1
 # Sniper is a long-running event loop: never batch-restart it in parallel.
