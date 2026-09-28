@@ -21,15 +21,19 @@ Twitter Sniper continuously searches Twitter/X for freshly posted `claude.ai/ref
 * **Twitter/X Account:** Active session cookies from your logged-in browser
 * **Telegram:** A Bot token (from @BotFather) and your numeric chat ID
 
-## Installation
+### Installation
 
-```bash
+Clone the repository and create an isolated Python environment:
+
 git clone https://github.com/movregz/twitter-sniper-bot.git sniper
 cd sniper
-pip install --user curl_cffi httpx orjson h2
-# On PEP 668 systems (Debian/Ubuntu 24.04+):
-pip install --user --break-system-packages curl_cffi httpx orjson h2
-```
+
+# Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install curl_cffi httpx orjson h2
 
 ### Configuration
 
