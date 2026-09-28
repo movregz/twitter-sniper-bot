@@ -31,20 +31,21 @@ pip install --user curl_cffi httpx orjson h2
 pip install --user --break-system-packages curl_cffi httpx orjson h2
 ```
 
-## Configuration
+### Configuration
 
-All credentials are read from environment variables — nothing is hardcoded anywhere in the source. See `.env.example` for the full annotated template.
+All credentials are loaded dynamically from environment variables or supported local configuration files. **No credentials are hardcoded in the source code.** See `.env.example` for the full annotated template.
 
-| Variable | Purpose |
-|---|---|
+| Variable             | Purpose                                                       |
+| -------------------- | ------------------------------------------------------------- |
 | `TWITTER_AUTH_TOKEN` | `auth_token` cookie from your logged-in x.com browser session |
-| `TWITTER_CT0` | `ct0` cookie from the same session |
-| `TELEGRAM_BOT_TOKEN` | Bot token issued by @BotFather |
-| `TELEGRAM_CHAT_ID` | Numeric ID of the chat that receives alerts |
+| `TWITTER_CT0`        | `ct0` cookie from the same session                            |
+| `TELEGRAM_BOT_TOKEN` | Bot token issued by @BotFather                                |
+| `TELEGRAM_CHAT_ID`   | Numeric ID of the chat that receives alerts                   |
 
 Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPER_CAMPAIGN_DENYLIST`, …) are documented in `.env.example` with their safe defaults.
 
-**Never commit real credentials.** Export them in your shell profile, a systemd unit's `Environment=` lines, or a `~/.config/sniper/telegram.json` file that stays outside the repo.
+> **Warning:** Never commit real credentials or authentication cookies to Git. Store secrets in environment variables or supported local configuration files that are strictly excluded by `.gitignore`. Keep secret-containing files readable only by the account running the sniper.
+
 
 ## How to run
 
