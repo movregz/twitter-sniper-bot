@@ -64,7 +64,7 @@ python3 twitter_sniper.py
 
 **Via systemd (Recommended for 24/7 uptime):**
 
-When using a virtual environment, `systemd` must use the Python executable inside `venv` rather than the system Python installation.
+When using a virtual environment, `systemd` must use the Python executable inside `.venv` rather than the system Python installation.
 
 ```bash
 # 1. Create directory and copy systemd files
