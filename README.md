@@ -13,13 +13,13 @@ Twitter Sniper continuously searches Twitter/X for freshly posted `claude.ai/ref
 - **Atomic, crash-safe state** — fsync + atomic rename persistence; the pipeline survives restarts mid-write without corruption.
 - **Zero re-work** — a persistent stale-slug cache ensures every known-dead link is skipped forever, spending quota only on new drops.
 
-## Requirements
+### Requirements
 
-- Python 3.10+ (developed on 3.13)
-- Linux / any POSIX system (uses `fcntl`; macOS works too)
-- Packages: `curl_cffi`, `httpx`, `orjson`, `h2` (HTTP/2 support for httpx)
-- A Twitter/X account (session cookies from your logged-in browser)
-- A Telegram bot token (from [@BotFather](https://t.me/BotFather)) and your numeric chat ID
+* **Python 3.10+** (developed on 3.13)
+* **OS:** Linux or any POSIX-compliant system (uses `fcntl`; macOS is also supported)
+* **Packages:** `curl_cffi`, `httpx`, `orjson`, `h2` (HTTP/2 support for httpx)
+* **Twitter/X Account:** Active session cookies from your logged-in browser
+* **Telegram:** A Bot token (from @BotFather) and your numeric chat ID
 
 ## Installation
 
