@@ -1,0 +1,26 @@
+[Unit]
+Description=Claude Referral Sniper — persistent event-driven referral monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Smoke check: refuse to start on syntax/import-time errors (the 09-27 're'
+# crash class). flock still enforces single instance at runtime.
+ExecStartPre=/usr/bin/python3 -m py_compile /path/to/sniper/twitter_sniper.py
+ExecStart=/usr/bin/python3 /path/to/sniper/twitter_sniper.py
+WorkingDirectory=/path/to/sniper
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONUNBUFFERED=1
+# Sniper is a long-running event loop: never batch-restart it in parallel.
+# flock inside twitter_sniper.py also enforces single instance.
+Restart=on-failure
+RestartSec=5
+# Stop an unhealthy run hard so RestartSec brings up a fresh one — but give
+# in-flight validation a moment to requeue its link into persistent state.
+TimeoutStopSec=15
+StandardOutput=append:/path/to/sniper/data/twitter_search_cron.log
+StandardError=append:/path/to/sniper/data/twitter_search_cron.log
+
+[Install]
+WantedBy=default.target

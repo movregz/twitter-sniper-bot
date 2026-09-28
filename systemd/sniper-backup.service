@@ -1,0 +1,7 @@
+[Unit]
+Description=Sniper state backup — daily snapshot with 7-day retention
+After=twitter-search.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /path/to/sniper/backup_state.sh

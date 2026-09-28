@@ -1,0 +1,21 @@
+# Runtime data — state, backups, log, lock: never commit
+data/
+*.log
+*.lock
+
+# Secrets / local config
+.env
+*.json.tmp
+config.yaml
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Atomic-write temp files
+.tmp_*
+.state_*
+
+# Virtual environments
+venv/
+.venv/

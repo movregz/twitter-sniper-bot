@@ -1,0 +1,10 @@
+[Unit]
+Description=Run sniper state backup daily at midnight
+
+[Timer]
+OnCalendar=*-*-* 00:00:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
