@@ -80,7 +80,7 @@ Inside the `[Service]` section, update these lines to your actual installation p
 ```ini
 [Service]
 WorkingDirectory=/path/to/sniper
-ExecStart=/path/to/sniper/venv/bin/python /path/to/sniper/twitter_sniper.py
+ExecStart=/path/to/sniper/.venv/bin/python /path/to/sniper/twitter_sniper.py
 ```
 
 Replace `/path/to/sniper` with the actual path where you cloned the repository.
