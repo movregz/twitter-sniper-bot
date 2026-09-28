@@ -69,9 +69,13 @@ systemctl --user enable --now sniper-backup.timer   # nightly state backups
 
 `twitter_sniper.py` enforces single-instance via `flock`, so accidental double-starts exit cleanly.
 
-## Disclaimer
+### Disclaimer
 
-This project is provided for **educational and research purposes only**. It demonstrates techniques in async pipeline design, TLS-fingerprint-aware HTTP clients, quota-aware polling, and atomic state persistence. Using it may be subject to the terms of service of the platforms it interacts with. The authors take no responsibility for misuse. Use responsibly and at your own risk.
+This project is provided for **educational and research purposes only**. It demonstrates techniques in asynchronous pipeline design, TLS-fingerprint-aware HTTP clients, quota-aware polling, API-based validation, and atomic state persistence.
+
+Use of this software may be subject to the Terms of Service, acceptable-use policies, and other rules of the platforms and services it interacts with. Users are solely responsible for ensuring that their use of the software complies with all applicable laws, regulations, and third-party terms.
+
+The authors and contributors are not responsible for misuse of the software or for any consequences arising from its use. The software is provided on an "AS IS" basis, without guarantees regarding availability, accuracy, compatibility, or continued operation of third-party services.
 
 ---
 
