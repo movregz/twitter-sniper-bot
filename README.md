@@ -30,8 +30,8 @@ git clone https://github.com/movregz/twitter-sniper-bot.git sniper
 cd sniper
 
 # Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 
 # Install dependencies
 pip install curl_cffi httpx orjson h2
@@ -58,7 +58,7 @@ Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPE
 # =================================================================
 # OPTION 1: Standalone Execution (Foreground)
 # =================================================================
-source venv/bin/activate
+source .venv/bin/activate
 python3 twitter_sniper.py
 ```
 
