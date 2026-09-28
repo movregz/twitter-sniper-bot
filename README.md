@@ -6,12 +6,12 @@ Twitter Sniper continuously searches Twitter/X for freshly posted `claude.ai/ref
 
 ## Features
 
-- **Browserless validation** — verdicts come directly from the referral status API; no page rendering, no Selenium, no headless Chrome. ~0.1s per check.
-- **Rate-limit aware polling** — a quota-surgical 9.0s ± 0.5s jittered cadence empirically tuned to Twitter's ~100-search/15-minute budget: zero blackouts, zero 429 storms, 100% polling uptime.
-- **HTTP/2 connection pooling** — a single persistent `httpx.AsyncClient(http2=True)` for alert delivery and reused TLS sessions for search and validation: one handshake, warm sockets forever.
-- **Strict verdict logic** — only `is_valid: true` counts. Ambiguity is always rejected, so every alert is a confirmed-active code with zero false positives.
-- **Atomic, crash-safe state** — fsync + atomic rename persistence; the pipeline survives restarts mid-write without corruption.
-- **Zero re-work** — a persistent stale-slug cache ensures every known-dead link is skipped forever, spending quota only on new drops.
+* **Browserless validation** — verdicts come directly from the referral status API; no page rendering, no Selenium, no headless Chrome. ~0.1s per check.
+* **Rate-limit aware polling** — a quota-surgical 9.0s ± 0.5s jittered cadence empirically tuned to Twitter's ~100-search/15-minute budget: zero blackouts, zero 429 storms, 100% polling uptime.
+* **HTTP/2 connection pooling** — a single persistent `httpx.AsyncClient(http2=True)` for alert delivery and reused TLS sessions for search and validation: one handshake, warm sockets forever.
+* **Strict verdict logic** — only `is_valid: true` counts. Ambiguity is always rejected, so every alert is a confirmed-active code with zero false positives.
+* **Atomic, crash-safe state** — fsync + atomic rename persistence; the pipeline survives restarts mid-write without corruption.
+* **Zero re-work** — a persistent stale-slug cache ensures every known-dead link is skipped forever, spending quota only on new drops.
 
 ### Requirements
 
@@ -26,7 +26,7 @@ Twitter Sniper continuously searches Twitter/X for freshly posted `claude.ai/ref
 Clone the repository and create an isolated Python environment:
 
 ```bash
-git clone [https://github.com/movregz/twitter-sniper-bot.git](https://github.com/movregz/twitter-sniper-bot.git) sniper
+git clone https://github.com/movregz/twitter-sniper-bot.git sniper
 cd sniper
 
 # Create and activate a virtual environment
@@ -35,6 +35,7 @@ source venv/bin/activate
 
 # Install dependencies
 pip install curl_cffi httpx orjson h2
+```
 
 ### Configuration
 
@@ -50,7 +51,6 @@ All credentials are loaded dynamically from environment variables or supported l
 Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPER_CAMPAIGN_DENYLIST`, …) are documented in `.env.example` with their safe defaults.
 
 > **Warning:** Never commit real credentials or authentication cookies to Git. Store secrets in environment variables or supported local configuration files that are strictly excluded by `.gitignore`. Keep secret-containing files readable only by the account running the sniper.
-
 
 ### How to run
 
@@ -84,6 +84,7 @@ systemctl --user enable --now sniper-backup.timer
 
 # 4. Verify that the sniper is running
 systemctl --user status twitter-search.service
+```
 
 > **Note:** The `twitter_sniper.py` process enforces single-instance execution using `flock`. If another instance is already running, the new process exits cleanly instead of starting a second polling loop.
 
