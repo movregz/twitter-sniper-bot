@@ -24,7 +24,7 @@ Twitter Sniper continuously searches Twitter/X for freshly posted `claude.ai/ref
 ## Installation
 
 ```bash
-git clone <this-repo> sniper
+git clone https://github.com/movregz/twitter-sniper-bot.git sniper
 cd sniper
 pip install --user curl_cffi httpx orjson h2
 # On PEP 668 systems (Debian/Ubuntu 24.04+):
