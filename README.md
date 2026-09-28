@@ -25,7 +25,8 @@ Twitter Sniper continuously searches Twitter/X for freshly posted `claude.ai/ref
 
 Clone the repository and create an isolated Python environment:
 
-git clone https://github.com/movregz/twitter-sniper-bot.git sniper
+```bash
+git clone [https://github.com/movregz/twitter-sniper-bot.git](https://github.com/movregz/twitter-sniper-bot.git) sniper
 cd sniper
 
 # Create and activate a virtual environment
@@ -51,28 +52,40 @@ Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPE
 > **Warning:** Never commit real credentials or authentication cookies to Git. Store secrets in environment variables or supported local configuration files that are strictly excluded by `.gitignore`. Keep secret-containing files readable only by the account running the sniper.
 
 
-## How to run
-
-**Standalone:**
+### How to run
 
 ```bash
-export TWITTER_AUTH_TOKEN=... TWITTER_CT0=... \
-       TELEGRAM_BOT_TOKEN=... TELEGRAM_CHAT_ID=...
+# =================================================================
+# OPTION 1: Standalone Execution (Foreground)
+# =================================================================
+source venv/bin/activate
 python3 twitter_sniper.py
-```
 
-**Via systemd (recommended — auto-restart, boot persistence):**
-
-```bash
+# =================================================================
+# OPTION 2: Via systemd (Recommended for 24/7 uptime)
+# =================================================================
+# 1. Create directory and copy systemd files
 mkdir -p ~/.config/systemd/user
 cp systemd/twitter-search.service systemd/sniper-backup.* ~/.config/systemd/user/
-# edit the copied unit: set ExecStart paths to your install location
+
+# 2. Edit the service file
+nano ~/.config/systemd/user/twitter-search.service
+
+# --- [ INSIDE NANO, UPDATE THESE LINES TO YOUR ACTUAL PATH ] ---
+# WorkingDirectory=/path/to/sniper
+# ExecStart=/path/to/sniper/venv/bin/python /path/to/sniper/twitter_sniper.py
+# (Save: Ctrl+O -> Enter -> Exit: Ctrl+X)
+# ---------------------------------------------------------------
+
+# 3. Reload systemd configuration and start services
 systemctl --user daemon-reload
 systemctl --user enable --now twitter-search.service
-systemctl --user enable --now sniper-backup.timer   # nightly state backups
-```
+systemctl --user enable --now sniper-backup.timer
 
-`twitter_sniper.py` enforces single-instance via `flock`, so accidental double-starts exit cleanly.
+# 4. Verify that the sniper is running
+systemctl --user status twitter-search.service
+
+> **Note:** The `twitter_sniper.py` process enforces single-instance execution using `flock`. If another instance is already running, the new process exits cleanly instead of starting a second polling loop.
 
 ### Telegram Interaction
 
