@@ -70,6 +70,12 @@ systemctl --user enable --now sniper-backup.timer   # nightly state backups
 
 `twitter_sniper.py` enforces single-instance via `flock`, so accidental double-starts exit cleanly.
 
+### Telegram Interaction
+
+Once the sniper is running, you can monitor its health directly from your Telegram chat:
+
+* **`state`** — Send this exact word (or command) to your bot to receive a real-time status report. The bot will reply with current statistics, including uptime, total links validated, and polling health.
+
 ### Disclaimer
 
 This project is provided for **educational and research purposes only**. It demonstrates techniques in asynchronous pipeline design, TLS-fingerprint-aware HTTP clients, quota-aware polling, API-based validation, and atomic state persistence.
