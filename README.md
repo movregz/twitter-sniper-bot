@@ -60,23 +60,34 @@ Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPE
 # =================================================================
 source venv/bin/activate
 python3 twitter_sniper.py
+```
 
-# =================================================================
-# OPTION 2: Via systemd (Recommended for 24/7 uptime)
-# =================================================================
+**Via systemd (Recommended for 24/7 uptime):**
+
+When using a virtual environment, `systemd` must use the Python executable inside `venv` rather than the system Python installation.
+
+```bash
 # 1. Create directory and copy systemd files
 mkdir -p ~/.config/systemd/user
 cp systemd/twitter-search.service systemd/sniper-backup.* ~/.config/systemd/user/
 
 # 2. Edit the service file
 nano ~/.config/systemd/user/twitter-search.service
+```
 
-# --- [ INSIDE NANO, UPDATE THESE LINES TO YOUR ACTUAL PATH ] ---
-# WorkingDirectory=/path/to/sniper
-# ExecStart=/path/to/sniper/venv/bin/python /path/to/sniper/twitter_sniper.py
-# (Save: Ctrl+O -> Enter -> Exit: Ctrl+X)
-# ---------------------------------------------------------------
+Inside the `[Service]` section, update these lines to your actual installation path:
 
+```ini
+[Service]
+WorkingDirectory=/path/to/sniper
+ExecStart=/path/to/sniper/venv/bin/python /path/to/sniper/twitter_sniper.py
+```
+
+Replace `/path/to/sniper` with the actual path where you cloned the repository.
+
+Save the file with `Ctrl+O`, press `Enter`, then exit with `Ctrl+X`.
+
+```bash
 # 3. Reload systemd configuration and start services
 systemctl --user daemon-reload
 systemctl --user enable --now twitter-search.service
