@@ -90,10 +90,6 @@ _state_lock = asyncio.Lock()
 
 
 # ── Stale-slug cache: definitive-reject memory shared by all pollers ─────
-# Links adjudicated expired_or_used / unknown_slug / unparseable never hit
-# the Claude oracle again — Bluesky's 120+ link dumps would otherwise re-hammer
-# it every 15s. rate_limit / transient / challenge_lost are NOT cached (retryable).
-# Backed by a file so the cache survives restarts; loaded once at boot.
 STALE_CACHE_PATH = DATA_DIR + "/stale_slugs.json"
 
 
@@ -343,7 +339,7 @@ async def process_link(state, q, url, source="Twitter"):
         gate.note(was_challenge)
         log(f"VEND {url} result={reason} valid={valid} detail={str(detail)[:110]}")
 
-        # ── VALID → fire-and-forget dispatch (2026-09-28): the worker does
+        # ── VALID → fire-and-forget dispatch: the worker does
         # NOT block on Telegram's API response. state.finish() runs first so
         # the link is adjudicated instantly; a background task performs the
         # send and records the result. Sibling workers keep validating.
@@ -446,9 +442,7 @@ async def poller(state, q):
                                 - (mono() - t0)))
 
 
-# ── One poller: Twitter. Reddit and Bluesky were removed 2026-09-28 after
-# yield analysis (log window: Reddit 25 disc → 0 valid, Bluesky 120 disc →
-# 1 valid, vs Twitter 21 disc → 17 valid). Kept in git history if ever needed.
+# ── One poller:
 
 
 def acquire_lock():
@@ -489,12 +483,10 @@ async def amain():
     log(f"SNIPER start known={len(state.links)} pending={q.qsize()} "
         f"peak_concurrency={state.peak_concurrency}")
 
-    # ⚠ 2026-09-27: telegram_listener REMOVED entirely. It long-polled
-    # getUpdates on the SAME bot token as the Hermes gateway (this Telegram
-    # chat), which Telegram forbids (single poller per token). The resulting
-    # 409 Conflict war made the gateway drop user messages. Stats requests
-    # are now served by Hermes reading sniper_state.json directly.
-    # Do NOT re-add a getUpdates consumer on this token.
+    # ⚠ telegram_listener was removed because it used getUpdates on the same
+    # bot token as the Hermes gateway, causing Telegram 409 Conflict errors.
+    # Stats requests are now handled by Hermes reading sniper_state.json directly.
+    # Do NOT add another getUpdates consumer on this token.
     workers = [asyncio.create_task(worker(state, q, i)) for i in range(CONCURRENCY)]
     poll = asyncio.create_task(poller(state, q))
     await asyncio.gather(poll, *workers)
