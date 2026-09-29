@@ -105,6 +105,16 @@ Once the sniper is running, you can monitor its health directly from your Telegr
 
 * **`state`** — Send this exact word (or command) to your bot to receive a real-time status report. The bot will reply with current statistics, including uptime, total links validated, and polling health.
 
+### How to use
+
+1. **Setup:** First, create a new Claude account and have it ready.
+2. **Execution:** Run the Python tool (standalone or via systemd).
+3. **Monitor:** Wait for a validated referral link to arrive in your Telegram bot.
+4. **Action:** Click and claim the link quickly upon arrival.
+5. **Verification:** Complete the required payment verification using a VCC (Virtual Credit Card) with a $1 balance (no actual charge will be deducted) → **Done.**
+
+> **Optional:** After the payment verification is complete, you can replace your primary VCC with a test VCC or an unused VCC.
+
 ### Disclaimer
 
 This project is provided for **educational and research purposes only**. It demonstrates techniques in asynchronous pipeline design, TLS-fingerprint-aware HTTP clients, quota-aware polling, API-based validation, and atomic state persistence.
