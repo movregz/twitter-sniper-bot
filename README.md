@@ -58,7 +58,7 @@ Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPE
 # =================================================================
 # OPTION 1: Standalone Execution (Foreground)
 # =================================================================
-source .venv/bin/activate
+
 python3 twitter_sniper.py
 ```
 
