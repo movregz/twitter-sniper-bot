@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.jpg" width="200" alt="Twitter Sniper Logo"></p>
+
 # Twitter Sniper — Claude Referral Link Monitor
 
 High-performance, low-latency asynchronous Twitter monitor and validation engine for Claude referral links.
