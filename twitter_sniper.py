@@ -43,6 +43,7 @@ LINK_RETRIES  = int(os.environ.get("SNIPER_LINK_RETRIES", "2"))
 CHALLENGE_GLOBAL = float(os.environ.get("SNIPER_CF_PAUSE", "20"))  # after 3 straight 403s
 MAX_REQUEUE   = int(os.environ.get("SNIPER_MAX_REQUEUE", "40"))
 DRY_RUN       = os.environ.get("SNIPER_DRY_RUN") == "1"
+LOOKBACK_HOURS = float(os.environ.get("SNIPER_LOOKBACK_HOURS", "1.0"))  # search time window
 
 STATE_PATH = DATA_DIR + "/sniper_state.json"
 LOG_PATH   = DATA_DIR + "/twitter_search_cron.log"
@@ -421,7 +422,7 @@ async def poller(state, q):
         t0 = mono()
         try:
             tweets = await loop.run_in_executor(
-                None, lambda: sess.search(QUERY, count=40, product="Latest", since_hours=6))
+                None, lambda: sess.search(QUERY, count=40, product="Latest", since_hours=LOOKBACK_HOURS))
             links = ts.extract_referral_links(tweets)
             bump("twitter_links", len(links))
             new = 0

@@ -105,6 +105,55 @@ Once the sniper is running, you can monitor its health directly from your Telegr
 
 * **`state`** — Send this exact word (or command) to your bot to receive a real-time status report. The bot will reply with current statistics, including uptime, total links validated, and polling health.
 
+### Standalone Telegram Reporter (Optional)
+
+For real-time `/state` command responses without running a second `getUpdates` consumer on the same bot token (which causes Telegram 409 conflicts), a standalone reporter service is provided:
+
+```bash
+# 1. Copy the reporter service file
+mkdir -p ~/.config/systemd/user
+cp systemd/sniper-reporter.service ~/.config/systemd/user/
+
+# 2. Reload and start
+systemctl --user daemon-reload
+systemctl --user enable --now sniper-reporter.service
+```
+
+The reporter (`telegram_reporter.py`) long-polls Telegram for `state`/`status` commands, reads `sniper_state.json` for link statistics, and queries live process metrics (`systemctl`, `ps`) plus the cron log for polling health. It sends a rich formatted report:
+
+```
+🎯 Sniper Stats — live from state, 12:34:56 UTC
+
+⚙️ Engine
+Running ✓ — uptime 2h 15m | PID 12345 | CPU 0.5% | RAM 45MB
+Queue: 0 | Last poll: 3s ago | Cycles today: 142
+
+📊 All-time (state)
+Links tracked: 1,247
+☑ Valid & sent: 3 | 💀 expired_or_used: 1,189 | ❓ unknown_slug: 55
+
+📅 Today
+Discovered: 12 | Valid: 0 | Alerts sent: 0
+
+📡 Pollers
+Twitter: sole poller, clean ✓ queue 0
+
+🔄 Pipeline
+Fully operational.
+```
+
+> **Note:** The reporter uses the same `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from `.env`. It does **not** run `getUpdates` on the sniper token — it uses its own long-poll loop.
+
+### Configuration: Search Lookback Window
+
+The Twitter search lookback window is configurable via `SNIPER_LOOKBACK_HOURS` (default: `1.0` hour). Override in `.env` or the service `Environment=` section:
+
+```bash
+SNIPER_LOOKBACK_HOURS=2.0   # custom lookback (e.g., 2 hours)
+```
+
+A 1-hour window balances fresh-link discovery with quota efficiency. The original 6-hour window returned many stale results; 15 minutes was too narrow for Twitter's "Latest" index to surface fresh posts.
+
 ### How to use
 
 1. **Setup:** First, create a new Claude account and have it ready.

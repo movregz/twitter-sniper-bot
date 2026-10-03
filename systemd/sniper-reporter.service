@@ -1,0 +1,19 @@
+[Unit]
+Description=Sniper Telegram Reporter — handles /state commands
+After=network-online.target twitter-search.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/sniper
+ExecStart=/root/sniper/.venv/bin/python /root/sniper/telegram_reporter.py
+EnvironmentFile=/root/sniper/.env
+Environment=PATH=/root/sniper/.venv/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/root/sniper/data/telegram_reporter.log
+StandardError=append:/root/sniper/data/telegram_reporter.log
+
+[Install]
+WantedBy=default.target
