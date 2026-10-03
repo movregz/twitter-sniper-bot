@@ -47,6 +47,7 @@ All credentials are loaded dynamically from environment variables or supported l
 | `TWITTER_CT0`        | `ct0` cookie from the same session                            |
 | `TELEGRAM_BOT_TOKEN` | Bot token issued by @BotFather                                |
 | `TELEGRAM_CHAT_ID`   | Numeric ID of the chat that receives alerts                   |
+| `SNIPER_LOOKBACK_HOURS` | Twitter search lookback window in hours (default: `1.0`)    |
 
 Optional tunables (`SNIPER_POLL`, `SNIPER_WORKERS`, `SNIPER_MAX_REQUEUE`, `SNIPER_CAMPAIGN_DENYLIST`, …) are documented in `.env.example` with their safe defaults.
 
@@ -99,12 +100,6 @@ systemctl --user status twitter-search.service
 
 > **Note:** The `twitter_sniper.py` process enforces single-instance execution using `flock`. If another instance is already running, the new process exits cleanly instead of starting a second polling loop.
 
-### Telegram Interaction
-
-Once the sniper is running, you can monitor its health directly from your Telegram chat:
-
-* **`state`** — Send this exact word (or command) to your bot to receive a real-time status report. The bot will reply with current statistics, including uptime, total links validated, and polling health.
-
 ### Standalone Telegram Reporter (Optional)
 
 For real-time `/state` command responses without running a second `getUpdates` consumer on the same bot token (which causes Telegram 409 conflicts), a standalone reporter service is provided:
@@ -143,16 +138,6 @@ Fully operational.
 ```
 
 > **Note:** The reporter uses the same `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from `.env`. It does **not** run `getUpdates` on the sniper token — it uses its own long-poll loop.
-
-### Configuration: Search Lookback Window
-
-The Twitter search lookback window is configurable via `SNIPER_LOOKBACK_HOURS` (default: `1.0` hour). Override in `.env` or the service `Environment=` section:
-
-```bash
-SNIPER_LOOKBACK_HOURS=2.0   # custom lookback (e.g., 2 hours)
-```
-
-A 1-hour window balances fresh-link discovery with quota efficiency. The original 6-hour window returned many stale results; 15 minutes was too narrow for Twitter's "Latest" index to surface fresh posts.
 
 ### How to use
 
@@ -204,7 +189,7 @@ The authors and contributors are not responsible for misuse of the software or f
 
 **What it does:** Restricts every search to fresh posts only.
 
-**Implementation:** Computed startTime parameter (6h lookback) on each SearchTimeline request in twitter_search.py.
+**Implementation:** Computed `startTime` parameter (1h lookback default, configurable via `SNIPER_LOOKBACK_HOURS`) on each SearchTimeline request in twitter_search.py.
 
 **Benefit:** Small per-poll pages (39 tweets / 32 links typical), no wasted quota on stale results, fresh-drop detection.
 
